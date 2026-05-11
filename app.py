@@ -474,7 +474,7 @@ elif page == "Distribution Fitting":
     # Summary table for all 15
     @st.cache_data(show_spinner="Fitting distributions for all stations…")
     def fit_all(precip_json):
-        df = pd.read_json(precip_json)
+        df = pd.read_json(StringIO(precip_json))
         df.index = pd.to_datetime(df.index)
         rows = []
         for stn in ALL_STATIONS:
@@ -650,7 +650,7 @@ elif page == "ARIMA Forecast":
 
     @st.cache_data(show_spinner="Fitting ARIMA (grid search)…")
     def fit_arima(station_name, ts_json):
-        ts = pd.read_json(ts_json, typ="series")
+        ts = pd.read_json(StringIO(ts_json), typ="series")
         ts.index = pd.to_datetime(ts.index)
         best_aic, best_order = np.inf, (1,0,1)
         for p in range(0,4):
@@ -722,7 +722,7 @@ elif page == "ARIMA Forecast":
     st.subheader("ADF Stationarity — All 15 Stations")
     @st.cache_data(show_spinner="Running ADF tests…")
     def adf_all(precip_json):
-        df = pd.read_json(precip_json); df.index = pd.to_datetime(df.index)
+        df = pd.read_json(StringIO(precip_json)); df.index = pd.to_datetime(df.index)
         rows = []
         for s in ALL_STATIONS:
             series = df[s].dropna()
@@ -816,8 +816,8 @@ elif page == "Regression":
     st.subheader("R² Summary — All 15 Stations")
     @st.cache_data(show_spinner="Fitting regression for all stations…")
     def r2_all(precip_json, temp_json, spi_json):
-        df_p = pd.read_json(precip_json); df_p.index = pd.to_datetime(df_p.index)
-        df_t = pd.read_json(temp_json);   df_t.index = pd.to_datetime(df_t.index)
+        df_p = pd.read_json(StringIO(precip_json)); df_p.index = pd.to_datetime(df_p.index)
+        df_t = pd.read_json(StringIO(temp_json));   df_t.index = pd.to_datetime(df_t.index)
         import json; spi_d = json.loads(spi_json)
         rows = []
         for s in ALL_STATIONS:
