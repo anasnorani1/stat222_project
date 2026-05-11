@@ -7,6 +7,7 @@ Run:  streamlit run app.py
 """
 
 import os, sys, warnings, itertools
+from io import StringIO
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -139,7 +140,7 @@ def _fetch_stations(names):
 
 @st.cache_data(show_spinner="Computing SPI for all 15 stations…")
 def compute_spi(precip_json: str) -> dict:
-    precip = pd.read_json(precip_json)
+    precip = pd.read_json(StringIO(precip_json))
     precip.index = pd.to_datetime(precip.index)
     out = {}
     for stn in ALL_STATIONS:
